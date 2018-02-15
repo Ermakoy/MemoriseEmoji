@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import Emojiblock from './Components/Emojiblock/Emojiblock';
+
 import './grid.css';
 import './App.css';
+import FlipBlock from "./Components/FlipBlock/FlipBlock";
 
 class App extends Component {
   render() {
     return (
       <div className="grid__col grid__col--centered">
         {[...Array(16)].map((x, i) =>
-          <Emojiblock key={i} />
+            <FlipBlock key={i} ref={instance => {this.child = instance;}}
+                       />
         )}
       </div>
     );
