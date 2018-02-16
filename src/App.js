@@ -7,11 +7,15 @@ import FlipBlock from "./Components/FlipBlock/FlipBlock";
 class App extends Component {
   render() {
     return (
-      <div className="grid__col grid__col--centered">
-        {[...Array(16)].map((x, i) =>
-            <FlipBlock key={i} ref={instance => {this.child = instance;}}
-                       />
-        )}
+      <div className="app">
+        <div className="grid__col grid__col--centered">
+          {[...Array(16)].map((x, i) =>
+            <FlipBlock key={i} ref={instance => {
+              this.child = instance;
+            }}
+            />
+          )}
+        </div>
       </div>
     );
   }

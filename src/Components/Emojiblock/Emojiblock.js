@@ -5,9 +5,9 @@ import './Emojiblock.css';
 class Emojiblock extends Component {
   render() {
     return (
-        <div className="EmojiBlock">
-          <span role="img" className="emoji">🤔</span>
-        </div>
+      <div className="EmojiBlock">
+        <span role="img" className="emoji">🤔</span>
+      </div>
     );
   }
 }
