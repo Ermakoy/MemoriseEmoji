@@ -30,7 +30,7 @@ class App extends Component {
       <div className="app">
         <div className="grid__col grid__col--centered">
           {[...Array(16)].map((x, i) =>
-            <FlipBlock key={i} emoji ={this.state.emojiArray}/>
+            <FlipBlock key={i} emoji={this.state.emojiArray[i]}/>
           )}
         </div>
       </div>

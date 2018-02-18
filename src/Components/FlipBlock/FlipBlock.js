@@ -22,7 +22,7 @@ class FlipBlock extends Component {
       <div className="flipBlock grid__col grid__col--1-of-4" onClick={() => {this.handleClick();}}>
         <ReactCardFlip isFlipped={this.state.isFlipped}>
           <CardBack key="front"/>
-          <Emojiblock key="back"/>
+          <Emojiblock key="back" emoji={this.props.emoji}/>
         </ReactCardFlip>
       </div>
     );
