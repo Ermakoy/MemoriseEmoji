@@ -25,12 +25,31 @@ class App extends Component {
     };
   }
 
+  checker = () => {
+    if (this.state.opened[0].character === this.state.opened[1].character) {
+      alert('Right!');
+
+    }
+  };
+  addOpened = index => {
+    let newOpened = this.state.opened;
+    newOpened.push(index);
+    this.setState({opened : newOpened});
+  };
+  removeOpened = index => {
+    let newOpened = this.state.opened;
+    newOpened.splice(newOpened.indexOf(index), 1);
+    this.setState({opened: newOpened});
+  };
+
   render() {
     return (
       <div className="app">
         <div className="grid__col grid__col--centered">
           {[...Array(16)].map((x, i) =>
-            <FlipBlock key={i} emoji={this.state.emojiArray[i]}/>
+            <FlipBlock key={i} arrayKey={i} emoji={this.state.emojiArray[i]}
+                       addOpened={this.addOpened}
+                       removeOpened={this.removeOpened}/>
           )}
         </div>
       </div>
