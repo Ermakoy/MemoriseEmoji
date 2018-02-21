@@ -26,15 +26,19 @@ class App extends Component {
   }
 
   checker = () => {
-    if (this.state.opened[0].character === this.state.opened[1].character) {
-      alert('Right!');
-
+    let firstIndex = this.state.opened[0];
+    let secondIndex = this.state.opened[1];
+    if (this.state.opened.length === 2) {
+      setTimeout(() => {
+        alert(this.state.emojiArray[firstIndex].character === this.state.emojiArray[secondIndex] ? 'Correct!' : 'Sorry, no!')
+      }, 500);
     }
   };
   addOpened = index => {
     let newOpened = this.state.opened;
     newOpened.push(index);
-    this.setState({opened : newOpened});
+    this.setState({opened: newOpened});
+    this.checker();
   };
   removeOpened = index => {
     let newOpened = this.state.opened;

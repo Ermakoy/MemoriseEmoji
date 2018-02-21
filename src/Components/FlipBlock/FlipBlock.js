@@ -14,11 +14,9 @@ class FlipBlock extends Component {
 
   handleClick = (key) => {
     this.setState({isFlipped: !this.state.isFlipped});
-    if (!this.state.isFlipped){
-      console.log('opened');
+    if (!this.state.isFlipped) {
       this.props.addOpened(key);
-    }else{
-      console.log('closed');
+    } else {
       this.props.removeOpened(key);
     }
   };
@@ -26,7 +24,9 @@ class FlipBlock extends Component {
 
   render() {
     return (
-      <div className="flipBlock grid__col grid__col--1-of-4" onClick={() => {this.handleClick(this.props.arrayKey)}}>
+      <div className="flipBlock grid__col grid__col--1-of-4" onClick={() => {
+        this.handleClick(this.props.arrayKey)
+      }}>
         <ReactCardFlip isFlipped={this.state.isFlipped}>
           <CardBack key="front"/>
           <Emojiblock key="back" emoji={this.props.emoji}/>
