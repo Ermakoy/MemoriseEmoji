@@ -30,7 +30,7 @@ class App extends Component {
     let secondIndex = this.state.opened[1];
     if (this.state.opened.length === 2) {
       setTimeout(() => {
-        alert(this.state.emojiArray[firstIndex].character === this.state.emojiArray[secondIndex] ? 'Correct!' : 'Sorry, no!')
+        alert(this.state.emojiArray[firstIndex].character === this.state.emojiArray[secondIndex].character ? 'Correct!' : 'Sorry, no!')
       }, 500);
     }
   };
