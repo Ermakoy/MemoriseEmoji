@@ -1,16 +1,6 @@
-import React, {Component} from 'react';
-import img from '../../img/tuz.jpg';
+import React from 'react';
+import styled from 'styled-components';
 
-class CardBack extends Component {
-
-  render() {
-    return (
-      <div className="CardBack">
-          <img src={img} alt="Card back" className="grid__col--8-of-8 grid__col grid__col--centered"/>
-      </div>
-    );
-  }
-
-}
+const CardBack = props => <Wrapper {...props} />;
 
 export default CardBack;
