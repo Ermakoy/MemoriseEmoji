@@ -49,22 +49,19 @@ function getInitialEmoji() {
   return shuffleArray([...emojiArray, ...emojiArray]);
 }
 
-const App = props => {
-  const [state, setState] = useState({
-    emoji: getInitialEmoji(),
-    opened: Array(16).fill(false),
-  });
+const emoji = getInitialEmoji();
 
-  console.log(state);
+const App = props => {
+  const [opened, setOpened] = useState(Array(16).fill(false));
 
   const flipCard = index =>
     useCallback(
       () =>
-        setState(oldState => {
-          const newOpened = [...oldState.opened];
+        setOpened(oldOpened => {
+          const newOpened = [...oldOpened];
           newOpened.splice(index, 1, !newOpened[index]);
 
-          return { ...oldState, opened: newOpened };
+          return newOpened;
         }),
       [index]
     );
@@ -72,9 +69,9 @@ const App = props => {
   return (
     <AppWrapper>
       <Grid colNumber={4} rowNumber={4}>
-        {state.emoji.map(({ character }, index) => (
+        {emoji.map(({ character }, index) => (
           <FlipCard
-            isFlipped={state.opened[index]}
+            isFlipped={opened.opened[index]}
             emoji={character}
             onClick={flipCard(index)}
           />
