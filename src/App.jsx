@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+const randomEmoji = require('random-emoji');
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -36,8 +38,6 @@ const Grid = styled.div`
   grid-template-rows: repeat(${({ rowNumber }) => rowNumber || 1}, 1fr);
 `;
 
-const randomEmoji = require('random-emoji');
-
 const shuffleArray = arr =>
   arr
     .map(a => [Math.random(), a])
@@ -51,8 +51,18 @@ function getInitialEmoji() {
 
 const emoji = getInitialEmoji();
 
+const emojiPairs = emoji.reduce((acc, nextEmoji, index) => {
+  acc[nextEmoji.name] = acc[nextEmoji.name]
+    ? [...acc[nextEmoji.name], index]
+    : [index];
+
+  return acc;
+}, {});
+
 const App = props => {
+  console.log(emoji, emojiPairs);
   const [opened, setOpened] = useState(Array(16).fill(false));
+  const [disabledCards, setDisabled] = useState(Array(16).fill(false));
 
   const flipCard = index =>
     useCallback(
@@ -71,7 +81,7 @@ const App = props => {
       <Grid colNumber={4} rowNumber={4}>
         {emoji.map(({ character }, index) => (
           <FlipCard
-            isFlipped={opened.opened[index]}
+            isFlipped={opened[index]}
             emoji={character}
             onClick={flipCard(index)}
           />
