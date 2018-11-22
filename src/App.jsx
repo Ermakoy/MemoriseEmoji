@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { useImmer } from 'use-immer';
 import styled from 'styled-components';
 
 const randomEmoji = require('random-emoji');
@@ -60,18 +61,23 @@ const emojiPairs = emoji.reduce((acc, nextEmoji, index) => {
 }, {});
 
 const App = props => {
-  console.log(emoji, emojiPairs);
-  const [opened, setOpened] = useState(Array(16).fill(false));
-  const [disabledCards, setDisabled] = useState(Array(16).fill(false));
+  const [opened, setOpened] = useImmer(Array(16).fill(false));
+  const [disabledCards, setDisabled] = useImmer(Array(16).fill(false));
 
   const flipCard = index =>
     useCallback(
       () =>
-        setOpened(oldOpened => {
-          const newOpened = [...oldOpened];
-          newOpened.splice(index, 1, !newOpened[index]);
+        setOpened(draftOpened => {
+          draftOpened[index] = !draftOpened[index];
+        }),
+      [index]
+    );
 
-          return newOpened;
+  const switchDisabled = index =>
+    useCallback(
+      () =>
+        setDisabled(draftDisabeled => {
+          draftDisabeled[index] = !draftDisabeled[index];
         }),
       [index]
     );
@@ -79,13 +85,18 @@ const App = props => {
   return (
     <AppWrapper>
       <Grid colNumber={4} rowNumber={4}>
-        {emoji.map(({ character }, index) => (
-          <FlipCard
-            isFlipped={opened[index]}
-            emoji={character}
-            onClick={flipCard(index)}
-          />
-        ))}
+        {emoji.map(({ character }, index) => {
+          const isCardDisabled = disabledCards[index];
+
+          return (
+            <FlipCard
+              isFlipped={opened[index]}
+              emoji={character}
+              onClick={isCardDisabled ? () => {} : flipCard(index)}
+              disabled={isCardDisabled}
+            />
+          );
+        })}
       </Grid>
     </AppWrapper>
   );
