@@ -18,21 +18,20 @@ const rows = chunk(
 );
 
 const emojiPairs = emoji.reduce((acc, nextEmoji, index) => {
-  acc[nextEmoji.name] = acc[nextEmoji.name]
-    ? [...acc[nextEmoji.name], index]
+  acc[nextEmoji.character] = acc[nextEmoji.character]
+    ? [...acc[nextEmoji.character], index]
     : [index];
 
   return acc;
 }, {});
 
-const getInitialOpened = count => Array(count).fill(false);
+const getInitialOpened = (count = 16) => Array(count).fill(false);
 
 const App = props => {
   const [opened, setOpened] = useImmer(getInitialOpened());
-  const [disabledCards, setDisabled] = useImmer(Array(16).fill(false));
+  const [disabledCards, setDisabled] = useImmer(getInitialOpened());
 
-  const isMoreThanOneOpened =
-    opened.filter(isCardOpened => !!isCardOpened).length > 1;
+  const isMoreThanOneOpened = opened.filter(Boolean).length > 1;
 
   const switchDisabled = index =>
     useCallback(
@@ -46,16 +45,11 @@ const App = props => {
   const flipCard = index =>
     useCallback(
       () =>
-        setOpened(
-          draftOpened => {
-            draftOpened[index] = !draftOpened[index];
-          },
-          isMoreThanOneOpened ? () => {} : () => switchDisabled(index)
-        ),
-      [index, isMoreThanOneOpened]
+        setOpened(draftOpened => {
+          draftOpened[index] = !draftOpened[index];
+        }),
+      [index]
     );
-
-  console.log(disabledCards, opened);
 
   return (
     <AppWrapper>
@@ -64,6 +58,8 @@ const App = props => {
           <Row>
             {col.map(({ character, index }) => {
               const isCardDisabled = disabledCards[index];
+              const flipCurrentCard = flipCard(index);
+              const disableCurrentCard = switchDisabled(index);
 
               return (
                 <Col>
@@ -71,8 +67,18 @@ const App = props => {
                     key={index}
                     isFlipped={opened[index]}
                     emoji={character}
-                    onClick={isCardDisabled ? () => {} : flipCard(index)}
                     disabled={isCardDisabled}
+                    onClick={() =>
+                      isCardDisabled
+                        ? {}
+                        : Promise.resolve()
+                            .then(flipCurrentCard)
+                            .then(
+                              isMoreThanOneOpened
+                                ? () => {}
+                                : disableCurrentCard
+                            )
+                    }
                   />
                 </Col>
               );
