@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   height: 100%;
 
   background: ${({ isFlipped }) => (isFlipped ? '' : 'hotpink')};
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 
   font-size: 60px;
 `;

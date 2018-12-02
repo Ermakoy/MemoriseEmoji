@@ -11,4 +11,15 @@ function getInitialEmoji(count = 8) {
   return shuffleArray([...emojiArray, ...emojiArray]);
 }
 
-export { getInitialEmoji };
+function chunk(array, size) {
+  if (!array) return [];
+
+  const firstChunk = array.slice(0, size);
+
+  if (!firstChunk.length) {
+    return array;
+  }
+  return [firstChunk].concat(chunk(array.slice(size, array.length), size));
+}
+
+export { getInitialEmoji, chunk };

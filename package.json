@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@smooth-ui/core-sc": "^7.0.5",
     "random-emoji": "^1.0.2",
     "react": "^16.7.0-alpha.2",
     "react-card-flip": "^0.3.0",
