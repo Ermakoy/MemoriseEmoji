@@ -11,15 +11,13 @@ function getInitialEmoji(count = 8) {
   return shuffleArray([...emojiArray, ...emojiArray]);
 }
 
-function chunk(array, size) {
-  if (!array) return [];
-
-  const firstChunk = array.slice(0, size);
-
-  if (!firstChunk.length) {
-    return array;
-  }
-  return [firstChunk].concat(chunk(array.slice(size, array.length), size));
-}
+const chunk = (input, size) =>
+  input.reduce(
+    (arr, item, idx) =>
+      idx % size === 0
+        ? [...arr, [item]]
+        : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]],
+    []
+  );
 
 export { getInitialEmoji, chunk };
