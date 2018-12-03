@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Row, Col, Grid } from '@smooth-ui/core-sc';
 import { useImmer } from 'use-immer';
 
@@ -17,39 +17,73 @@ const rows = chunk(
   4
 );
 
-const emojiPairs = emoji.reduce((acc, nextEmoji, index) => {
-  acc[nextEmoji.character] = acc[nextEmoji.character]
-    ? [...acc[nextEmoji.character], index]
-    : [index];
-
-  return acc;
-}, {});
-
-const getInitialOpened = (count = 16) => Array(count).fill(false);
+const getInitialOpened = Array(16).fill(false); // (count = 16) => Array(count).fill(false);
 
 const App = props => {
-  const [opened, setOpened] = useImmer(getInitialOpened());
-  const [disabledCards, setDisabled] = useImmer(getInitialOpened());
+  const [opened, setOpened] = useImmer(getInitialOpened);
+  const [openedDraft, setDraft] = useImmer([]);
+  const [disabledCards, setDisabled] = useImmer(getInitialOpened);
 
-  const isMoreThanOneOpened = opened.filter(Boolean).length > 1;
+  const isMoreThanOneOpened = openedDraft.length > 1;
 
   const switchDisabled = index =>
     useCallback(
       () =>
-        setDisabled(draftDisabeled => {
-          draftDisabeled[index] = !draftDisabeled[index];
+        setDisabled(draftDisabled => {
+          draftDisabled[index] = !draftDisabled[index];
         }),
       [index]
     );
 
   const flipCard = index =>
     useCallback(
-      () =>
-        setOpened(draftOpened => {
-          draftOpened[index] = !draftOpened[index];
-        }),
+      () => {
+        setDraft(draftOpened => {
+          draftOpened.push(index);
+        });
+        setDisabled(draftDisabled => {
+          draftDisabled[index] = !draftDisabled[index];
+        });
+      },
       [index]
     );
+
+  useEffect(
+    () => {
+      if (!isMoreThanOneOpened) {
+        return;
+      }
+
+      const uniqueEmoji = [
+        ...new Set(openedDraft.map(index => emoji[index].character)),
+      ];
+
+      if (uniqueEmoji.length === 1) {
+        alert('congrats');
+
+        openedDraft.forEach(index => {
+          setOpened(draft => {
+            draft[index] = true;
+          });
+        });
+      } else {
+        alert('Not this time :C');
+
+        openedDraft.forEach(index => {
+          setOpened(draft => {
+            draft[index] = false;
+          });
+
+          setDisabled(draft => {
+            draft[index] = false;
+          });
+        });
+      }
+
+      setDraft(() => []);
+    },
+    [isMoreThanOneOpened]
+  );
 
   return (
     <AppWrapper>
@@ -57,28 +91,20 @@ const App = props => {
         {rows.map(col => (
           <Row>
             {col.map(({ character, index }) => {
+              const isCardFlipped =
+                opened[index] ||
+                openedDraft.find(openedIndex => openedIndex === index) !==
+                  undefined;
               const isCardDisabled = disabledCards[index];
               const flipCurrentCard = flipCard(index);
-              const disableCurrentCard = switchDisabled(index);
-
               return (
                 <Col>
                   <FlipCard
                     key={index}
-                    isFlipped={opened[index]}
+                    isFlipped={isCardFlipped}
                     emoji={character}
                     disabled={isCardDisabled}
-                    onClick={() =>
-                      isCardDisabled
-                        ? {}
-                        : Promise.resolve()
-                            .then(flipCurrentCard)
-                            .then(
-                              isMoreThanOneOpened
-                                ? () => {}
-                                : disableCurrentCard
-                            )
-                    }
+                    onClick={isCardDisabled ? () => ({}) : flipCurrentCard}
                   />
                 </Col>
               );
