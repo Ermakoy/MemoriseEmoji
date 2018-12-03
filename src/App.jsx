@@ -26,15 +26,6 @@ const App = props => {
 
   const isMoreThanOneOpened = openedDraft.length > 1;
 
-  const switchDisabled = index =>
-    useCallback(
-      () =>
-        setDisabled(draftDisabled => {
-          draftDisabled[index] = !draftDisabled[index];
-        }),
-      [index]
-    );
-
   const flipCard = index =>
     useCallback(
       () => {
