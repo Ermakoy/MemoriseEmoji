@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Box } from '@smooth-ui/core-sc';
 
-const FlipCard = ({ isFlipped, emoji, cover, ...rest }) => (
+const Card = ({ isFlipped, emoji, cover, ...rest }) => (
   <Box
     display="flex"
     justifyContent="center"
@@ -13,6 +13,13 @@ const FlipCard = ({ isFlipped, emoji, cover, ...rest }) => (
   >
     {isFlipped && emoji}
   </Box>
+);
+
+const FlipCard = memo(
+  Card,
+  (prevProps, nextProps) =>
+    prevProps.isFlipped === nextProps.isFlipped &&
+    prevProps.disabled === nextProps.disabled
 );
 
 export { FlipCard };
