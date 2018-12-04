@@ -79,13 +79,11 @@ const App = props => {
   return (
     <AppWrapper>
       <Grid fluid>
-        {rows.map(col => (
-          <Row>
+        {rows.map((col, rowIndex) => (
+          <Row key={rowIndex}>
             {col.map(({ character, index }) => {
               const isCardFlipped =
-                opened[index] ||
-                openedDraft.find(openedIndex => openedIndex === index) !==
-                  undefined;
+                opened[index] || openedDraft.includes(index);
               const isCardDisabled = disabledCards[index];
               const flipCurrentCard = flipCard(index);
               return (
